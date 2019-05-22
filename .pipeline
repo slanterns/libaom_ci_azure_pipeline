@@ -11,7 +11,12 @@ steps:
    "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" AOM.sln -p:Configuration=Release -maxcpucount -property:BuildInParallel=true
   displayName: 'Command Line Script'
 
-- task: PublishPipelineArtifact@0
-  displayName: 'Publish Pipeline Artifact'
+- task: GitHubRelease@0
+  displayName: 'GitHub release (create)'
   inputs:
-    targetPath: 'D:\a\1\build\Release'
+    gitHubConnection: github
+    repositoryName: 'libaom_ci_azure_pipeline'
+    title: release
+    releaseNotesSource: input
+    assets: 'D:\a\1\build\Release'
+    addChangeLog: false
