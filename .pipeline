@@ -1,0 +1,17 @@
+pool:
+  name: Hosted Windows 2019 with VS2019
+steps:
+- script: |
+   cd ..
+   mkdir build
+   cd build
+   choco install nasm
+   set PATH=%PROGRAMFILES%\NASM;%PATH%
+   cmake D:\a\1\s -Thost=x64 -DCMAKE_BUILD_TYPE=Release -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_TESTDATA=OFF -DENABLE_DOCS=OFF -DENABLE_TOOLS=OFF -DCONFIG_LOWBITDEPTH=1 -G "Visual Studio 16 2019" -Wno-dev
+   "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" AOM.sln -p:Configuration=Release -maxcpucount -property:BuildInParallel=true
+  displayName: 'Command Line Script'
+
+- task: PublishPipelineArtifact@0
+  displayName: 'Publish Pipeline Artifact'
+  inputs:
+    targetPath: 'D:\a\1\build\Release'
